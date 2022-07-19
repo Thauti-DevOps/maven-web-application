@@ -97,15 +97,15 @@
 	<distributionManagement>
 	
 	    <repository>
-	      <id>nexus</id>
-	      <name>Mithun Technologies Releases Nexus Repository</name>
-	      <url>http://13.233.119.31:9980/mithuntechnologies/repository/walmart-release/</url>
+	      <id>Avish</id>
+	      <name>Facebook Releases Nexus Repository</name>
+	      <url>http://13.126.184.179:8081/repository/Facebook-Release/</url>
 	    </repository>
 	    
 	    <snapshotRepository>
-	      <id>nexus</id>
-	      <name>Mithun Technologies Snapshot Nexus Repository </name>
-	      <url>http://13.233.119.31:9980/mithuntechnologies/repository/walmart-snapshot/</url>
+	      <id>Avish</id>
+	      <name>Facebook Snapshot Nexus Repository </name>
+	      <url>http://13.126.184.179:8081/repository/Facebook-Snapshot/</url>
 	    </snapshotRepository>
 	    
 	</distributionManagement>
