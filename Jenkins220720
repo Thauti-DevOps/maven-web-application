@@ -4,7 +4,7 @@ node
 def mavenHome = tool name: "Maven_3.8.6"
 stage('CheckoutCode')
 {
-git branch: 'master', credentialsId: 'e24f1ae3-c40b-4feb-af02-0c43c8f6bfc3', url: 'https://github.com/Thauti-DevOps/maven-web-application.git'
+git credentialsId: 'e24f1ae3-c40b-4feb-af02-0c43c8f6bfc3', url: 'https://github.com/Thauti-DevOps/maven-web-application.git'
 }
 
 stage('Build'){
