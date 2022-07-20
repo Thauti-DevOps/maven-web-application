@@ -1,0 +1,32 @@
+node
+
+{
+def mavenHome = tool name: "Maven_3.8.6"
+stage('CheckoutCode')
+{
+git branch: 'development', credentialsId: 'e24f1ae3-c40b-4feb-af02-0c43c8f6bfc3', url: 'https://github.com/Thauti-DevOps/maven-web-application.git'
+}
+
+stage('Build'){
+sh "${mavenHome}/bin/mvn clean package"
+}
+
+stage('ExceutingSonarQubeReport'){
+sh "${mavenHome}/bin/mvn clean sonar:sonar"
+}
+
+stage('UploadArtifacttoNexusRepo'){
+sh "${mavenHome}/bin/mvn clean deploy"
+}
+stage('DeployAppTomcat'){
+sshagent(['b50a0ad6-ad06-445c-9a82-3f3d98991c15']) {
+  sh "scp -o StrictHostKeyChecking=no target/maven-web-application.war ec2-user@3.110.142.163:/opt/apache-tomcat-9.0.64/webapps"
+}
+}
+stage ('EmailNOtifications'){
+emailext body: '''Build Succcess...
+
+Regards
+Thauti Jenkin Project''', subject: 'Build Success', to: 'awsdevops434@gmail.com'
+}
+}
