@@ -1,0 +1,61 @@
+pipeline{
+
+agent any
+ 
+tools{
+maven 'Maven_3.8.6'
+}
+
+triggers {
+    pollSCM('* * * * *')
+    //cron('* * * * *')
+}
+
+options {
+ //Add the time stamps to the console oputput
+  timestamps()
+    //Discard Opd build
+  buildDiscarder logRotator(artifactDaysToKeepStr: '', artifactNumToKeepStr: '5', daysToKeepStr: '', numToKeepStr: '5')
+}
+
+
+stages{
+//Get the code from GitHub
+stage('CheckoutCode'){
+steps{
+git branch: 'development', credentialsId: 'e24f1ae3-c40b-4feb-af02-0c43c8f6bfc3', url: 'https://github.com/Thauti-DevOps/maven-web-application.git'
+}
+}
+
+//Do the build
+
+stage('Build'){
+steps{
+sh "mvn clean package"
+}
+} 
+ 
+ //Execute SonarQube Report
+ stage('SonarQube Report'){
+     steps{
+         sh "mvn clean sonar:sonar"
+     }
+     }
+     
+     //Uplaod Artifactorydeatils
+ stage('Upload artifact Report'){
+     steps{
+         sh "mvn clean deploy"
+     }
+     }
+     
+      //Upload Appin Tomcat
+ stage('DeployTomcat'){
+     steps{
+         sshagent(['b50a0ad6-ad06-445c-9a82-3f3d98991c15']) {
+  sh "scp -o StrictHostKeyChecking=no target/maven-web-application.war ec2-user@3.110.142.163:/opt/apache-tomcat-9.0.64/webapps"
+     }
+     }
+ }
+}//stages closing
+}//Pipeline closing
